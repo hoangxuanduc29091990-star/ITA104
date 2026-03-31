@@ -1,0 +1,67 @@
+#khach_hang.sql
+SELECT * FROM public.khach_hang
+ORDER BY ma_kh ASC 
+INSERT into khach_hang(ten,sdt,dia_chi) Values
+('Ha Phuong Linh','0123456786','Hoai Duc'),
+('Vo Hoai Anh','0136234897','Cau Dien'),
+('Than Duc Hai','0226556986','Phan Tay Nhac'),
+('Phan Van Hung','0234567898','Hoe Thi'),
+('Ly Quoc Tuan','0963257486','Ha Dong'),
+('Tran Van Binh','0369876889','Cau Giay'),
+('Mac Van Quang','0399987885','Tram Troi'),
+('Bui Van Thuy','0326968968','Duc Dien'),
+('Kieu Bao Linh','0366552222','De la Thanh'),
+('Trinh Van Bo','0369687555','My Dinh');
+#main.sql
+create table khach_hang (
+	ma_kh serial primary key,
+	ten varchar (50),
+	sdt varchar(15),
+	dia_chi varchar (100)
+);
+create table san_pham (
+	ma_sp serial primary key,
+	ten_sp varchar(50),
+	don_gia integer
+);
+create table don_hang (
+	ma_don_hang serial primary key,
+	ma_kh integer ,
+	ngay_thang_nam date default current_date,
+    tong_tien integer,
+foreign key (ma_kh) references khach_hang(ma_kh)
+);
+create table chi_tiet_don_hang(
+	ma_don_hang integer,
+	ma_sp integer,
+	foreign key (ma_don_hang) references don_hang(ma_don_hang),
+	foreign key (ma_sp) references san_pham(ma_sp),
+	so_luong integer not null
+);
+--2 tao bang "nha cung cap"
+create table nha_cung_cap(
+ma_nha_cung_cap serial primary key,
+ten_nha_cung_cap varchar(255) not null,
+sdt_lien_lac varchar(15) unique
+);
+--5 tao bang nhap
+CREATE TABLE bang_nhap (
+    id integer
+);
+ALTER TABLE nha_cung_cap DROP COLUMN sdt_lien_lac;
+drop tabale bang_nhap;
+#nha_cung_cap.sql
+SELECT * FROM public.nha_cung_cap
+ORDER BY ma_nha_cung_cap ASC 
+INSERT INTO nha_cung_cap(ten_nha_cung_cap,sdt_lien_lac, email) 
+VALUES 
+('Công ty Sữa Việt Nam', '0987654321', 'contact@vinamilk.vn'),
+('Công ty Thực phẩm Á Châu', '0912345678', 'contact@acecook.vn');
+UPDATE nha_cung_cap
+SET sdt_lien_lac = '0911112222'
+WHERE ten_nha_cung_cap = 'Công ty Thực phẩm Á Châu';
+#san_pham.sql
+SELECT * FROM public.san_pham
+ORDER BY ma_sp ASC 
+DELETE FROM san_pham
+WHERE ma_sp = 8;
