@@ -1,0 +1,38 @@
+BÀi 1: 
+-- 1
+SELECT
+    COUNT(ma_sp) AS SoLuongSanPham,
+    ROUND(AVG(don_gia), 2) AS GiaTrungBinh,
+    MIN(don_gia) AS GiaReNhat,
+    MAX(don_gia) AS GiaDatNhat
+FROM san_pham ;
+
+BÀi 2:
+--2
+SELECT 
+    ncc.ten_nha_cung_cap AS supplier_name, 
+    COUNT(sp.ma_sp) AS tong_so_san_pham
+FROM nha_cung_cap ncc
+INNER JOIN san_pham sp ON ncc.ma_nha_cung_cap = sp.ma_nha_cung_cap
+GROUP BY ncc.ten_nha_cung_cap
+HAVING COUNT(sp.ma_sp) > 1;
+
+bài 3: 
+--3
+SELECT 
+    ma_don_hang AS order_id, 
+    TO_CHAR(ngay_thang_nam, 'DD/MM/YYYY') AS formatted_order_date
+FROM don_hang
+WHERE EXTRACT(YEAR FROM ngay_thang_nam) = 2025 
+  AND EXTRACT(MONTH FROM ngay_thang_nam) = 10;
+bài 4: 
+--4
+SELECT 
+    kh.ten AS full_name, 
+    SUM(ct.tong_tien_tai_thoi_diem_ban) AS tong_chi_tieu
+FROM khach_hang kh
+INNER JOIN don_hang dh ON kh.ma_kh = dh.ma_kh
+INNER JOIN chi_tiet_don_hang ct ON dh.ma_don_hang = ct.ma_don_hang
+GROUP BY kh.ten
+HAVING SUM(ct.tong_tien_tai_thoi_diem_ban) > 100000
+ORDER BY tong_chi_tieu DESC;
